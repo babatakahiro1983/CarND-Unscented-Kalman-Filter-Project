@@ -30,10 +30,10 @@ UKF::UKF() {
   time_us_ = 0;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 30;
+  std_a_ = 10;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 30;
+  std_yawdd_ = 5;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -373,7 +373,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
 		//residual
 		VectorXd z_diff = Zsig.col(i) - z_pred;
 
-		//angle normalization@// lidar‚Ì‚½‚ß‚¢‚ç‚È‚¢H
+		//angle normalizationã€€// lidarã®ãŸã‚ã„ã‚‰ãªã„ï¼Ÿ
 		//while (z_diff(1)> M_PI) z_diff(1) -= 2.*M_PI;
 		//while (z_diff(1)<-M_PI) z_diff(1) += 2.*M_PI;
 		
@@ -400,7 +400,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
 
 		//residual
 		VectorXd z_diff = Zsig.col(i) - z_pred;
-		//angle normalization@// lidar‚Ì‚½‚ß‚¢‚ç‚È‚¢H
+		//angle normalizationã€€// lidarã®ãŸã‚ã„ã‚‰ãªã„ï¼Ÿ
 		//while (z_diff(1)> M_PI) z_diff(1) -= 2.*M_PI;
 		//while (z_diff(1)<-M_PI) z_diff(1) += 2.*M_PI;
 
@@ -419,7 +419,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
 	//residual
 	VectorXd z_diff = z - z_pred;
 
-	//angle normalization@// lidar‚Ì‚½‚ß‚¢‚ç‚È‚¢H
+	//angle normalizationã€€// lidarã®ãŸã‚ã„ã‚‰ãªã„ï¼Ÿ
 	//while (z_diff(1)> M_PI) z_diff(1) -= 2.*M_PI;
 	//while (z_diff(1)<-M_PI) z_diff(1) += 2.*M_PI;
 
