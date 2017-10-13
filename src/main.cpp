@@ -113,10 +113,12 @@ int main()
 		  if (meas_package.sensor_type_ == MeasurementPackage::LASER) {
 			  //out_file_ << ukf.NIS_laser_ << "\n";
 			  std::cout << "NIS_laser = " << ukf.NIS_laser_ << std::endl;
+			  std::cout << "laser_more_NIS_rate = " << ukf.laser_more_NIS_rate_ << std::endl;
 		  }
 		  else if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
 			  //out_file_ << ukf.NIS_radar_ << "\n";
 			  std::cout << "NIS_radar = " << ukf.NIS_radar_ << std::endl;
+			  std::cout << "radar_more_NIS_rate = " << ukf.radar_more_NIS_rate_ << std::endl;
 		  }
 		  
 		  //Push the current estimated x,y positon from the Kalman filter's state vector

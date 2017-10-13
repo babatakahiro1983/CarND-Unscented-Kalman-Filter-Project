@@ -65,6 +65,30 @@ UKF::UKF() {
   // initial predicted sigma points matrix
   Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
 
+  // initial  Radar data counter
+  radar_counter_ = 0;
+
+  // initial  Radar NIS threshold
+  radar_NIS_threshold_ = 7.815;
+
+  // initial  Radar more NIS counter
+  radar_more_NIS_counter_ = 0;
+
+  // initial  Radar more NIS rate
+  radar_more_NIS_rate_ = 0;
+
+  // initial  Lasar data counter
+  laser_counter_ = 0;
+
+  // initial  Lasar NIS threshold
+  laser_NIS_threshold_ = 5.991;
+
+  // initial  Lasar more NIS counter
+  laser_more_NIS_counter_ = 0;
+
+  // initial  Lasar more NIS rate
+  laser_more_NIS_rate_ = 0;
+
 
   /**
   TODO:
@@ -430,6 +454,16 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
 	//NIS
 	NIS_laser_ = z_diff.transpose() * S.inverse() * z_diff;
 
+	// Lasar NIS threshold check
+	if (NIS_laser_ >= laser_NIS_threshold_) {
+		laser_more_NIS_counter_ = laser_more_NIS_counter_ + 1;
+	}
+
+	// Lasar data counter update
+	laser_counter_ = laser_counter_ + 1;
+
+	// Lasar more NIS rate
+	laser_more_NIS_rate_ = laser_more_NIS_counter_  / laser_counter_;
 }
 
 /**
@@ -545,4 +579,14 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
 	//NIS
 	NIS_radar_ = z_diff.transpose() * S.inverse() * z_diff;
 
+	// Radar NIS threshold check
+	if (NIS_radar_ >= radar_NIS_threshold_) {
+		radar_more_NIS_counter_ = radar_more_NIS_counter_ + 1;
+	}
+
+	// Radar data counter update
+	radar_counter_ = radar_counter_ + 1;
+
+	// Radar more NIS rate
+	radar_more_NIS_rate_ = radar_more_NIS_counter_ / radar_counter_;
 }

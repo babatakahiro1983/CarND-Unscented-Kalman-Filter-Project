@@ -73,6 +73,30 @@ public:
   ///* NIS Lasar
   double NIS_laser_;
 
+  ///* Radar data counter
+  int radar_counter_;
+
+  ///* Radar NIS threshold
+  double radar_NIS_threshold_;
+
+  ///* Radar more NIS counter
+  int radar_more_NIS_counter_;
+
+  ///* Radar more NIS rate
+  double radar_more_NIS_rate_;
+
+  ///* Lasar data counter
+  int laser_counter_;
+
+  ///* Lasar NIS threshold
+  double laser_NIS_threshold_;
+
+  ///* Lasar more NIS counter
+  int laser_more_NIS_counter_;
+
+  ///* Lasar more NIS rate
+  double laser_more_NIS_rate_;
+
   /**
    * Constructor
    */
