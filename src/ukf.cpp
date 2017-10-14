@@ -463,7 +463,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
 	laser_counter_ = laser_counter_ + 1;
 
 	// Lasar more NIS rate
-	laser_more_NIS_rate_ = laser_more_NIS_counter_  / laser_counter_;
+	laser_more_NIS_rate_ = double(laser_more_NIS_counter_) / double(laser_counter_);
 }
 
 /**
@@ -588,5 +588,5 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
 	radar_counter_ = radar_counter_ + 1;
 
 	// Radar more NIS rate
-	radar_more_NIS_rate_ = radar_more_NIS_counter_ / radar_counter_;
+	radar_more_NIS_rate_ = double(radar_more_NIS_counter_) / double(radar_counter_);
 }
