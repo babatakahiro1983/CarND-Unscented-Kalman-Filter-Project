@@ -1,18 +1,17 @@
 #ifndef UKF_H
 #define UKF_H
 
-#include "measurement_package.h"
 #include "Eigen/Dense"
-#include <vector>
-#include <string>
+#include "measurement_package.h"
 #include <fstream>
+#include <string>
+#include <vector>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 class UKF {
 public:
-
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
 
@@ -53,7 +52,7 @@ public:
   double std_radphi_;
 
   ///* Radar measurement noise standard deviation radius change in m/s
-  double std_radrd_ ;
+  double std_radrd_;
 
   ///* Weights of sigma points
   VectorXd weights_;
@@ -120,17 +119,55 @@ public:
    */
   void Prediction(double delta_t);
 
+  void GenerateSigmaPoints(const int &n_x_, const MatrixXd &P_,
+                           const double &lambda_, const VectorXd &x_,
+                           MatrixXd *Xsig_out);
+  void AugmentedSigmaPoints(const int &n_aug_, const VectorXd &x_,
+                            const MatrixXd &P_, const double &std_a_,
+                            const double &std_yawdd_, const double &lambda_,
+                            MatrixXd *Xsig_aug_out);
+  void SigmaPointPrediction(const int &n_aug_, const MatrixXd &Xsig_aug,
+                            const double &delta_t, MatrixXd *Xsig_pred_out);
+  void PredictMeanAndCovariance(VectorXd &weights_, const int &n_aug_,
+                                const double &lambda_, MatrixXd &Xsig_pred_,
+                                VectorXd *x_out, MatrixXd *P_out);
   /**
-   * Updates the state and the state covariance matrix using a laser measurement
+   * Updates the state and the state covariance matrix using a laser
+   * measurement
    * @param meas_package The measurement at k+1
    */
   void UpdateLidar(MeasurementPackage meas_package);
 
+  void PredictLidarMeasurement(const int &n_aug_, const MatrixXd &Xsig_pred_,
+                               VectorXd &weights_, MatrixXd *Zsig_out,
+                               VectorXd *z_out, MatrixXd *S_out);
+  void UpdateLidarState(const int &n_z, const MeasurementPackage &meas_package,
+                        const int &n_x_, MatrixXd &Zsig, const MatrixXd &z_pred,
+                        const MatrixXd &Xsig_pred, const VectorXd &weights_,
+                        const MatrixXd &S, VectorXd *x_, MatrixXd *P_,
+                        VectorXd *z_diff_out);
+
   /**
-   * Updates the state and the state covariance matrix using a radar measurement
+   * Updates the state and the state covariance matrix using a radar
+   * measurement
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  void PredictRadarMeasurement(
+      const int &n_aug_, const MatrixXd &Xsig_pred_, VectorXd &weights_,
+      MatrixXd *Zsig_out, VectorXd *z_out,
+      MatrixXd *S_out); // create matrix for sigma points in measurement space
+
+  void UpdateRadarState(const int &n_z, const MeasurementPackage &meas_package,
+                        const int &n_x_, MatrixXd &Zsig, const MatrixXd &z_pred,
+                        const MatrixXd &Xsig_pred, const VectorXd &weights_,
+                        const MatrixXd &S, VectorXd *x_, MatrixXd *P_,
+                        VectorXd *z_diff_out);
+  void ComputeNIS(const VectorXd &z_diff, const MatrixXd &S,
+                  const double &NIS_threshold_, double *NIS_out,
+                  int *more_NIS_counter_, int *counter_,
+                  double *more_NIS_rate_);
 };
 
 #endif /* UKF_H */
